@@ -1,0 +1,145 @@
+body {
+  background-color: #EFF0F5;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial';
+}
+
+.headercss{
+	
+	background-color: #1A1B3A;
+	color: white;
+	height: 80px;
+	font-size: 20px;
+	font-style: italic;
+	margin-top: 10px;
+}
+.loginheadercss{
+	
+	background-color: #1A1B3A;
+	color: white;
+	height: 80px;
+	font-size: 20px;
+	font-style: italic;
+	margin-top: 10px;
+}
+
+.mainheadertext{
+  padding-left: 20px;
+}
+
+.pagetitle{
+  text-align: center;
+  color: #1A1B3A;
+  padding: 5px; 
+}
+
+
+.buttonsgreen {
+  width: 100px;
+  height: 30px;
+  border: thick;
+  padding-left: 7px;
+  color: white;
+  background-color: #00640e;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.buttonsred {
+  width: 100px;
+  height: 30px;
+  border: thick;
+  padding-left: 7px;
+  color: white;
+  background-color: #b0301c;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.inputtextboxes{
+	 width: 300px; height: 30px;  border: none;  border-radius: 3px;  padding-left: 8px; margin-top: 10px;
+	
+}
+
+.inputtextboxlabels{
+	 color: white; font-size: 17px;  
+	
+}
+
+
+.logindiv{
+	background-color: #1A1B3A;
+	width: 300px;
+	overflow: hidden;
+	margin: auto;
+	margin: 20 0 0 450px;
+	padding: 80px;
+	border-radius: 15px ; 
+
+	
+}
+
+.formsdiv{
+	background-color: #1A1B3A;
+	width: 300px;
+	overflow: hidden;
+	margin: auto;
+	margin: 20 0 0 450px;
+	padding: 80px;
+	border-radius: 15px ; 
+}
+
+.dashdiv{
+	background-color: #1A1B3A;
+	width: 300px;
+	overflow: hidden;
+	margin: auto;
+	margin: 20 0 0 450px;
+	padding: 40px;
+	border-radius: 15px ; 
+}
+
+.formlabels{
+	color: white; 
+	font-size: 17px; 
+	
+}
+
+#urlTable {
+
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#urlTable td, #urlTable th {
+  border: 1px solid #0d0d0d;
+  padding: 8px;
+}
+
+#urlTable tr:nth-child(even){background-color: #adafaf; color: black;}
+#urlTable tr:nth-child(odd){background-color: #d9dadc; color: black;}
+#urlTable tr {color: white;}
+#urlTable tr:hover {background-color: white;}
+
+#urlTable td:nth-child(4){
+	text-align: center;
+
+}
+
+#urlTable td:nth-child(7){
+	text-align: center;
+
+}
+#urlTable td:nth-child(8){
+	text-align: center;
+
+}
+
+#urlTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #6c8fbd;
+  color: white;
+}

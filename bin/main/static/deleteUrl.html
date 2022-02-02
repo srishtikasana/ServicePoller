@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>    
+<html>    
+<head>    
+    <meta charset="UTF-8">
+    <title>URL Polling Service</title>
+     <link href="main.css" rel="stylesheet">
+</head>    
+<body>  
+<header class="headercss">
+
+<div>
+    <h3 class="mainheadertext" style=" display: inline-block;">URL Polling Service</h3>
+      <div style=" float:right;">  <h4 id="user" style=" display: inline-block;"></h4>
+        <input  style=" display: inline-block;" type="button" name="log" id="log" value="Log Out" class="buttonsred" onclick="LogOut()" style="margin-right: 20px; margin-top: 20px;"/>  <br/> <br/>
+</div></div>
+            
+             
+        </header> 
+    <h2 class="pagetitle">Delete URL</h2><br>    
+    <div class="formsdiv">    
+     
+        <label for="urlName" class="formlabels"><b>URL Name 
+        </b>    
+        </label>  
+        <input type="text" id="urlName" class="inputtextboxes" readonly>     
+        <br><br>   
+                <label for="url" class="formlabels"><b>URL 
+        </b>    
+        </label>  
+        <input type="text" id="url" class="inputtextboxes" readonly>     
+        <br><br>       
+        <input type="button" name="deleteUrl" id="deteleUrl" value="Confirm Delete" class="buttonsgreen" onclick="deleteUrl()" />   
+ 
+         <input type="button" name="cancel" id="cancel" value="Cancel" class="buttonsred" onclick="goToDashboard()" />   
+        <br><br>      
+            </div>
+      
+    <script>
+    
+    window.onload = function (){
+    	const queryString = window.location.search;
+    	console.log(queryString);
+    	const urlParams = new URLSearchParams(queryString);
+    	const urlId = urlParams.get('id');
+        const userId = localStorage.getItem("userId");
+        document.getElementById("user").innerHTML = userId;
+        
+        fetch('http://localhost:8080/api/servicepoller/geturl', {
+            method: 'POST', // or 'PUT'
+            headers: { },
+            body: urlId,
+            })
+            .then(response => response.json())
+            .then(data => {
+                var objStr=JSON.parse(JSON.stringify(data));
+                urlName.value = objStr.urlName;
+                url.value = objStr.url;
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            });  
+    }
+    function LogOut(){
+        
+        localStorage.setItem("userId","");
+        window.location = "/index.html";
+    }
+
+function goToDashboard(){
+	const userId = localStorage.getItem("userId");
+    localStorage.setItem("userId",userId);
+ 
+    window.location = "/dashboard.html";
+}
+        
+        function deleteUrl(){
+        	const queryString = window.location.search;
+        	console.log(queryString);
+        	const urlParams = new URLSearchParams(queryString);
+        	const urlId = urlParams.get('id');
+            const userId = localStorage.getItem("userId");
+            const urlName = document.getElementById('urlName').value;
+            const url = document.getElementById('url').value;
+            const requestBody = {
+                "id" : urlId,
+                "url": url,
+                "urlName":urlName
+            }
+            fetch('http://localhost:8080/api/servicepoller/deleteurl', {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Success:', data);
+                window.location="/dashboard.html";
+                })
+                .catch((error) => {
+                console.error('Error:', error);
+                window.location="/dashboard.html";
+                });
+        }
+    </script>   
+</body>       
+</html>     

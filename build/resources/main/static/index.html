@@ -1,0 +1,38 @@
+<!DOCTYPE html>    
+<html>    
+<head>    
+    <meta charset="UTF-8">
+    <title>URL Polling Service</title>
+    <link href="main.css" rel="stylesheet">
+     
+</head>    
+<body>  
+
+
+<header  class="loginheadercss">
+<div>
+    <h3 class="mainheadertext"  style=" display: inline-block;">URL Polling Service</h3>
+            
+             </div>
+        </header> 
+    <h2 class="pagetitle">LOGIN</h2><br>    
+    <div class="logindiv">    
+
+        	<div><input type="text" name="userId" id="userId" placeholder="Enter User Name" class="inputtextboxes"> <p style="color:red; font-style:italic;">* Mandatory Field</p> </div> 
+        	<br><br>          
+        	<input type="button" name="login" id="login" value="GO" class="buttonsgreen" onclick="goToDashboard();"/>   
+        	<br><br>    
+    
+</div>  
+    <script>
+        function goToDashboard(){
+
+        	if(document.getElementById('userId').value.trim() != ""){
+        	const userId = document.getElementById('userId').value.trim();
+            localStorage.setItem("userId",userId);
+            window.location = "/dashboard.html";
+        }
+        	}
+    </script>   
+</body>    
+</html>     

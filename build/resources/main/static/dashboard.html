@@ -1,0 +1,167 @@
+<!DOCTYPE html>    
+<html>    
+<head>    
+    <meta charset="UTF-8">
+    <title>URL Polling Service</title>
+    <link href="main.css" rel="stylesheet"> 
+</head>    
+<body>  
+<header class="headercss">
+
+<div>
+    <h3 class="mainheadertext" style=" display: inline-block;">URL Polling Service</h3>
+      <div style=" float:right;">  <h4 id="user" style=" display: inline-block;"></h4>
+        <input  style=" display: inline-block;" type="button" name="log" id="log" value="Log Out" class="buttonsred" onclick="LogOut()" style="margin-right: 20px; margin-top: 20px;"/>  <br/> <br/>
+</div></div>
+            
+             
+        </header> 
+       
+    <h2 class="pagetitle">DASHBOARD</h2>
+   
+    <div class="dashdiv" style="width:auto;">    
+    <input type="button" name="AddUrl" id="AddUrl" value="Add URL" class="buttonsgreen" onclick="addUrl()" style="margin-left: 20px; margin-bottom: 10px;" />       
+    
+            <table id="urlTable" class="tablestyle">
+                        <thead class="thead-dark">
+                            <tr class="tableheaders">
+                                <th scope="col">Unique Id</th>
+                                <th scope="col">URL Name</th>
+                                <th scope="col">URL</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Created At</th>
+                                <th scope="col">Updated At</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="tablebody">
+                        </tbody>
+                        </table>
+      
+   
+
+    
+    
+</div>   
+
+ 
+    <script>
+        
+        function LogOut(){
+            //const userid = document.getElementById('userid').value;
+            localStorage.setItem("userId","");
+            window.location = "/index.html";
+        }
+        
+        function addUrl(){
+        	//const userId = document.getElementById('userId').value;
+            //localStorage.setItem("userId",userId);
+            window.location = "/addUrl.html";
+        }
+        
+        function editUrl(id){
+        	//const userId = document.getElementById('userId').value;
+            //localStorage.setItem("userId",userId);
+            window.location = "/editUrl.html?id="+id;
+        }
+        
+        function delUrl(id){
+        	//const userId = document.getElementById('userId').value;
+            //localStorage.setItem("userId",userId);
+            window.location = "/deleteUrl.html?id="+id;
+        }
+        
+        var urlToCheck = new Map();
+        window.onload = function (){
+            const userId = localStorage.getItem("userId");
+            
+            document.getElementById("user").innerHTML = userId;
+            fetch('http://localhost:8080/api/servicepoller/listurls', {
+                method: 'POST', // or 'PUT'
+                headers: { },
+                body: userId,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    dataToDisplay = data;
+                    var table = document.getElementById("tableBody");
+                    data.forEach(function (urlDetail) {
+                        console.log(JSON.stringify(urlDetail));
+                        var row = table.insertRow(0);
+                        var id = row.insertCell(0);
+                        var urlName = row.insertCell(1);
+                        var url = row.insertCell(2);
+                        var status = row.insertCell(3);
+                        var createdDate = row.insertCell(4);
+                        var updateDate = row.insertCell(5);
+                        var editbtn = row.insertCell(6);
+                        var delbtn = row.insertCell(7);
+                        id.innerHTML = urlDetail.id;
+                        url.innerHTML = urlDetail.url;
+                        urlName.innerHTML = urlDetail.urlName;
+                        status.innerHTML = "Checking";
+                        status.id="status"+urlDetail.id;
+                        
+                        var crDate = new Date(urlDetail.createdDate);
+                        //Tue Feb 01 2022 10:20:50 GMT+0100 (Central European Standard Time)
+                        //crDate.getDate() getMonth() getFullYear() getHours() getMinutes() getSeconds();
+                        var crDt=crDate.toString();
+                        var crdtArr=crDt.split(" ",5).join();
+                        createdDate.innerHTML = crdtArr.replace(/,/gi," ");
+                        
+                        var upDate = new Date(urlDetail.updatedDate);
+                        var upDt=upDate.toString();
+                        var updtArr=upDt.split(" ",5).join();
+                        updateDate.innerHTML = updtArr.replace(/,/gi," ");
+                        
+                        editbtn.id="EditUrl"+urlDetail.id;
+                        editbtn.innerHTML = '<input type="button" value="Edit URL" class="buttonsgreen" style="align-self:center;" onclick="editUrl('+urlDetail.id+')" />';
+                        delbtn.id="DeleteUrl"+urlDetail.id;
+                        delbtn.innerHTML = '<input type="button" value="Delete URL" class="buttonsred" style="align-self;" onclick="delUrl('+urlDetail.id+')" />';
+                        urlToCheck["status"+urlDetail.id]=urlDetail.id;
+                        
+                        
+                    });
+                })
+                .catch((error) => {
+                console.error('Error:', error);
+                });
+        }
+
+        function checkStatus5SecondInterval() {
+            Object.keys(urlToCheck).forEach(function (key){
+             console.log(urlToCheck[key]);
+             checkStatus(urlToCheck[key], key);
+            });
+            setTimeout(checkStatus5SecondInterval, 10000);
+        }
+        checkStatus5SecondInterval();
+
+       async function checkStatus(id, key){
+            const url = "http://localhost:8080/api/servicepoller/urls/"+ id+"/status";
+            fetch(url, {
+                method: 'GET', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data === true){
+                     var status = document.getElementById(key);
+                    status.innerHTML = '<button class="buttonsgreen" style="align-self:center;" disabled>OK</button>';
+                    }else{
+                    var status = document.getElementById(key);
+                    status.innerHTML = '<button class="buttonsred" style="align-self:center;" disabled>FAIL</button>';
+                    }
+                })
+                .catch((error) => {
+                    var button = document.getElementById(key);
+                    button.innerHTML = '<button class="buttonsred" style="align-self:center;" disabled>FAIL</button>';
+                    console.error('Error:', error);
+                });
+        }
+    </script>   
+</body>    
+</html>     
